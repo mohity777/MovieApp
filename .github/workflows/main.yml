@@ -3,30 +3,38 @@ name: Test Coverage Difference
 on: pull_request
 
 jobs:
-  jest:
+  Jest:
     runs-on: ubuntu-latest
-    
     steps:
-            - name: Checkout repository
-              uses: actions/checkout@v2
+      - name: Check if secret github access token exists
+        run: |
+          if [[ "${{ secrets.GITHUB_TOKEN }}" == "" ]]; then
+            echo The secret does not exist
+          else
+            echo The secret exists
+          fi
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v2.1.5
-              with:
-                  node-version: 14.X
-                  registry-url: 'https://registry.npmjs.org'
+      - uses: actions/cache@v2
+        id: dep-modules
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
-            - name: Install
-              run: yarn install --frozen-lockfile
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install Dependencies
+        if: steps.dep-modules.outputs.cache-hit != 'true'
+        run: |
+          echo //js-registry.sharechat.com/:_authToken="${{ secrets.JS_REGISTRY_TOKEN }}" > .npmrc
+          npm set registry https://js-registry.sharechat.com
+          npm install --legacy-peer-deps
+      - name: Run Tests
+        run: npx jest src --collectCoverage
 
-            - run: npm build
-
-            - name: TestCoverage
-              id: testCovergae
-              uses: anuraag016/Jest-Coverage-Diff@master
-              with:
-                  accessToken: ${{ secrets.GITHUB_TOKEN  }}
-                  fullCoverageDiff: false
-                  runCommand: "npx jest --passWithNoTests --collectCoverageFrom='[\"src/**/*.{js,jsx,ts,tsx}\"]' --coverage --collectCoverage=true --coverageDirectory='./' --coverageReporters='json-summary' --forceExit --detectOpenHandles test/.*test.*"
+      - name: GitHub Script
+        uses: actions/github-script@v4.0.2
+        with:
+          script: |
+            const script = require('./.github/actionHelpers/jest-PR-comment.js')
+            await script({github, context, core})
