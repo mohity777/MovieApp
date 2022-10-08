@@ -27,6 +27,6 @@ jobs:
               id: testCovergae
               uses: anuraag016/Jest-Coverage-Diff@master
               with:
-                  accessToken: ${{ secrets.PRIVATE_TOKEN_GITHUB }}
+                  accessToken: ${{ secrets.GITHUB_TOKEN  }}
                   fullCoverageDiff: false
                   runCommand: "npx jest --passWithNoTests --collectCoverageFrom='[\"src/**/*.{js,jsx,ts,tsx}\"]' --coverage --collectCoverage=true --coverageDirectory='./' --coverageReporters='json-summary' --forceExit --detectOpenHandles test/.*test.*"
