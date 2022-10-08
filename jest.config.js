@@ -5,4 +5,4 @@ const config = {
     collectCoverage: true,
 };
 
-export default config;
+module.exports = config;
