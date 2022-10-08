@@ -1,0 +1,38 @@
+name: Test Coverage Difference
+
+on: pull_request
+
+jobs:
+  Jest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if secret github access token exists
+        run: |
+          if [[ "${{ secrets.GITHUB_TOKEN }}" == "" ]]; then
+            echo The secret does not exist
+          else
+            echo The secret exists
+          fi
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/cache@v2
+        id: dep-modules
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install Dependencies
+        if: steps.dep-modules.outputs.cache-hit != 'true'
+        run: yarn
+        
+      - name: Run Tests
+        run: npx jest src --collectCoverage --passWithNoTests
+
+      - name: GitHub Script
+        uses: actions/github-script@v4.0.2
+        with:
+          script: |
+            const script = require('./.github/actionHelpers/jest-PR-comment.js')
+            await script({github, context, core})
