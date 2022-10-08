@@ -1,21 +1,25 @@
-name: Node.js CI
+name: Test Coverage Difference
 
 on: pull_request
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        node-version: [14.x]
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
+  jest:
+    runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - uses: actions/cache@v2
+      id: cache-packages
       with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
+        path: "**/node_modules"
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+    - name: Install dependencies
+      if: steps.cache-packages.outputs.cache-hit != 'true'
+      run: yarn
+    
     - name: TestCoverage
       id: testCoverage
       uses: anuraag016/Jest-Coverage-Diff@master
