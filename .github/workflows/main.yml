@@ -25,10 +25,8 @@ jobs:
 
       - name: Install Dependencies
         if: steps.dep-modules.outputs.cache-hit != 'true'
-        run: |
-          echo //js-registry.sharechat.com/:_authToken="${{ secrets.JS_REGISTRY_TOKEN }}" > .npmrc
-          npm set registry https://js-registry.sharechat.com
-          npm install --legacy-peer-deps
+        run: yarn
+        
       - name: Run Tests
         run: npx jest src --collectCoverage
 
