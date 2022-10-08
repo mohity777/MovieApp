@@ -1,5 +1,5 @@
 import 'react-native';
-import { render } from '../../../testUtils/testUtils';
+import  render from 'react-test-renderer';
 import UpcomingMovies from "../UpcomingMovies";
 
 describe('UpcomingMovies test cases', () => {
