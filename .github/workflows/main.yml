@@ -25,7 +25,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.dep-modules.outputs.cache-hit != 'true'
-        run: npm
+        run: yarn
         
       - name: Run Tests
         run: npx jest src --collectCoverage --passWithNoTests
