@@ -1,5 +1,5 @@
 import React from 'react';
-import 'react-native';
+import {Text} from 'react-native';
 import renderer from 'react-test-renderer';
 import UpcomingMovies from "../UpcomingMovies";
 import * as Redux from "react-redux";
