@@ -21,7 +21,7 @@ module.exports = async ({ github, context, core }) => {
 		execSync("/usr/bin/git fetch");
 		execSync("/usr/bin/git stash");
 		execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`);
-		execSync('npx jest src --collectCoverage --passWithNoTests');
+		execSync("npm run test:coverage:prod");
 		const codeCoverageOld = JSON.parse(
 			fs.readFileSync(coverageJsonPath, "utf-8").toString()
 		);
