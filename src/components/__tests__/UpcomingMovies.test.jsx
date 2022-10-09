@@ -3,7 +3,6 @@ import 'react-native';
 import renderer from 'react-test-renderer';
 import UpcomingMovies from "../UpcomingMovies";
 import * as redux from 'react-redux'
-import jest from 'jest';
 
 const user = {
     id: 1,
