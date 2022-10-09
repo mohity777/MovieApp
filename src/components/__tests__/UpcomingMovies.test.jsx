@@ -9,12 +9,6 @@ jest.mock("react-redux", () => ({
     useSelector: jest.fn(),
 }));
 
-const user = {
-    id: 1,
-    name: 'User',
-  }
-
-
 describe('UpcomingMovies test cases', () => {
   const state = { 
   movies: {
@@ -31,10 +25,12 @@ describe('UpcomingMovies test cases', () => {
     })
 
     it('renders correctly', () => {
-        let component = renderer.create(<UpcomingMovies />)
-        const textInst = component.root.findByType(Text);
-        expect(
-            textInst.props.children.join()
-          ).toBe(`Upcoming Movies`)
+    
+        let root; 
+act(() => {
+  root = create(<UpcomingMovies />)
+});
+        expect(root.toJSON()).toMatchSnapshot();
+
     });
 });
