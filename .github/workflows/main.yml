@@ -2,6 +2,9 @@ name: Test Coverage Difference
 
 on: pull_request
 
+ permissions:
+      pull-requests: write
+
 jobs:
   Jest:
     runs-on: ubuntu-latest
