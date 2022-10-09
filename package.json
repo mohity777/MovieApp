@@ -7,14 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "lint": "eslint .",
-    "test": "TZ=UTC jest src",
-		"jest": "jest",
-		"test:dev": "TZ=UTC jest src --runInBand --detectOpenHandles",
-		"test:coverage": "rm -Rf coverage && TZ=UTC jest src --collectCoverage",
-		"test:coverage:dev": "rm -Rf coverage/ && TZ=UTC jest src --collectCoverage && python3 -m http.server -d coverage/lcov-report 9090",
-		"test:watch": "npm run -s test -- --watch",
-		"sonar": "node sonar-project.js",
-    "test:coverage:prod": "TZ=UTC jest src --collectCoverage"
+    "test": "jest",
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "^0.2.6",
