@@ -28,7 +28,7 @@ jobs:
         run: yarn
         
       - name: Run Tests
-        run: npx jest src --collectCoverage --passWithNoTests
+        run: npx jest src --collectCoverage --passWithNoTests --updateSnapshot 
 
       - name: GitHub Script
         uses: actions/github-script@v4.0.2
