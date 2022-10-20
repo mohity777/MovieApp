@@ -15,10 +15,6 @@ on:
         types: [opened, synchronize, reopened, edited]
     workflow_dispatch:
 
-defaults:
-    run:
-        working-directory: ./
-
 jobs:
     build:
         strategy:
@@ -42,12 +38,12 @@ jobs:
               run: yarn
 
             - name: Build Bundle
-              run: npx react-native bundle --platform ${{ matrix.platform }} --dev false --entry-file ${{ matrix.platform == 'android' && 'index.android.js' || 'index.ios.js' }}  --bundle-output ./${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
+              run: npx react-native bundle --platform ${{ matrix.platform }} --dev false --entry-file index.js  --bundle-output ./${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
 
             - uses: actions/github-script@v4.1.0
               env:
                   PLATFORM: ${{ matrix.platform }}
-                  ENTRY_FILE: ${{ matrix.platform == 'android' && 'index.android.js' || 'index.ios.js' }}
+                  ENTRY_FILE: index.js
                   BUNDLE_FILE: ${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
               with:
                   script: |
