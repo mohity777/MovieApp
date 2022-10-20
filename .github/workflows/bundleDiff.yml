@@ -3,11 +3,13 @@ on:
     push:
         branches:
             - main
+            - master
             - init
             - release-*
     pull_request:
         branches:
             - main
+            - master
             - init
             - release-*
         types: [opened, synchronize, reopened, edited]
