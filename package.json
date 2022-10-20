@@ -29,7 +29,8 @@
     "react-redux": "^8.0.1",
     "recyclerlistview": "^4.2.0",
     "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "zustand": "^4.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
