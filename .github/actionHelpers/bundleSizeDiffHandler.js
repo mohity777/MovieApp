@@ -13,6 +13,7 @@ const prDiffHandler = async ({ github, context, core }) => {
         const headBuildSize = fs.statSync(buildPath).size;
 
         const branchNameBase = context.payload.pull_request.base.ref;
+        console.log("|||||||||||||||||||||||||||||||",process.env.PLATFORM, process.env.ENTRY_FILE,process.env.BUNDLE_FILE)
         execSync('/usr/bin/git fetch');
         execSync('/usr/bin/git stash');
         execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`);
