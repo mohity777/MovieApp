@@ -42,7 +42,7 @@ const prDiffHandler = async ({ github, context, core }) => {
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: messageToPost,
-            stringToSearch: '## Changes in app bundle',
+            stringToSearch: `## Changes in ${process.env.PLATFORM} app bundle`,
         });
     } catch (e) {
         console.log('ERROR', e);
