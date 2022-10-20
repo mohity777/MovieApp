@@ -29,7 +29,7 @@ const prDiffHandler = async ({ github, context, core }) => {
         ).toFixed(4);
 
         let messageToPost =
-            '## Changes in app bundle\n' +
+            `## Changes in ${process.env.PLATFORM} app bundle\n` +
             '| Original Size (KB) | New Size (KB)  | Change (%) |\n' +
             '|   :------------:   |   :--------:   | :--------: |\n';
 
