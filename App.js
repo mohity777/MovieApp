@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native';
 import { Provider } from 'react-redux';
 import AppNavigationContainer from './src/navigation';
 import store from './src/store';
-
+import 'recyclerlistview';
 const App = () => {
 
   return (
