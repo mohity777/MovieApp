@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import AppNavigationContainer from './src/navigation';
 import store from './src/store';
 import 'recyclerlistview';
-import 'zustland';
+import {StoreApi} from 'zustand'
 
 const App = () => {
 
