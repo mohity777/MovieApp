@@ -1,4 +1,4 @@
-name: Validate React Native Workflow
+name: Bundle Size Difference
 on:
     push:
         branches:
@@ -14,16 +14,19 @@ on:
             - release-*
         types: [opened, synchronize, reopened, edited]
     workflow_dispatch:
-    
-permissions: write-all
 
 jobs:
-    build:
+    Bundle_Head:
         strategy:
             matrix:
                 platform: [android, ios]
 
         runs-on: ubuntu-latest
+
+        env:
+            PLATFORM: ${{ matrix.platform }}
+            ENTRY_FILE: index.js
+            BUNDLE_FILE: ${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
 
         steps:
             - name: Checkout
@@ -36,16 +39,13 @@ jobs:
                   key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
             - name: Install dependencies
+              if: steps.cache-packages.outputs.cache-hit != 'true'
               run: yarn
 
             - name: Build Bundle
-              run: npx react-native bundle --platform ${{ matrix.platform }} --dev false --entry-file index.js  --bundle-output ./${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
+              run: npx react-native bundle --platform $PLATFORM --dev false --entry-file $ENTRY_FILE  --bundle-output ./$BUNDLE_FILE
 
             - uses: actions/github-script@v4.1.0
-              env:
-                  PLATFORM: ${{ matrix.platform }}
-                  ENTRY_FILE: index.js
-                  BUNDLE_FILE: ${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
               with:
                   script: |
                       const script = require('./.github/actionHelpers/bundleSizeDiffHandler.js')
