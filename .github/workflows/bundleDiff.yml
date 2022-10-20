@@ -45,7 +45,7 @@ jobs:
         run: yarn
 
       - name: Build Bundle
-        run: npx react-native bundle --platform ${{ env.PLATFORM }} --dev false --entry-file ${{ env.ENTRY_FILE }}  --bundle-output ./${{ env.BUNDLE_FILE }} --reset-cache
+        run: npx react-native bundle --platform ${{ env.PLATFORM }} --dev false --entry-file ${{ env.ENTRY_FILE }}  --bundle-output ./${{ env.BUNDLE_FILE }}
 
       - uses: actions/github-script@v4.1.0
         with:
