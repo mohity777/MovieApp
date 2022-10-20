@@ -42,13 +42,13 @@ jobs:
               run: yarn
 
             - name: Build Bundle
-              run: npx react-native bundle --platform ${{ matrix.platform }} --dev false --entry-file ${{ matrix.platform == 'android' && index.android.js || index.ios.js }}  --bundle-output ./${{ matrix.platform == 'android' && index.android.bundle || index.ios.bundle }}
+              run: npx react-native bundle --platform ${{ matrix.platform }} --dev false --entry-file ${{ matrix.platform == 'android' && 'index.android.js' || 'index.ios.js' }}  --bundle-output ./${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
 
             - uses: actions/github-script@v4.1.0
               env:
                   PLATFORM: ${{ matrix.platform }}
-                  ENTRY_FILE: ${{ matrix.platform == 'android' && index.android.js || index.ios.js }}
-                  BUNDLE_FILE: ${{ matrix.platform == 'android' && index.android.bundle || index.ios.bundle }}
+                  ENTRY_FILE: ${{ matrix.platform == 'android' && 'index.android.js' || 'index.ios.js' }}
+                  BUNDLE_FILE: ${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
               with:
                   script: |
                       const script = require('./.github/actionHelpers/bundleSizeDiffHandler.js')
