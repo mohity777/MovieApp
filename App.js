@@ -3,7 +3,9 @@ import { SafeAreaView } from 'react-native';
 import { Provider } from 'react-redux';
 import AppNavigationContainer from './src/navigation';
 import store from './src/store';
-
+import 'recyclerlistview';
+import {StoreApi} from 'zustand'
+import 'react-router-native'
 const App = () => {
 
   return (

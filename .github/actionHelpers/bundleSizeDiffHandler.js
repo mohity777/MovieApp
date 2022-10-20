@@ -9,10 +9,11 @@ const toKiloBytes = (size) => `${parseFloat(size / 1024).toFixed(2)}`;
 
 const prDiffHandler = async ({ github, context, core }) => {
     try {
-        let buildPath = path.join(__dirname, '../../index.android.bundle');
+        let buildPath = path.join(__dirname, `../../${process.env.BUNDLE_FILE}`);
         const headBuildSize = fs.statSync(buildPath).size;
-
+        console.log("11111111", headBuildSize)
         const branchNameBase = context.payload.pull_request.base.ref;
+        console.log("|||||||||||||||||||||||||||||||",process.env.PLATFORM, process.env.ENTRY_FILE,process.env.BUNDLE_FILE)
         execSync('/usr/bin/git fetch');
         execSync('/usr/bin/git stash');
         execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`);
@@ -20,15 +21,15 @@ const prDiffHandler = async ({ github, context, core }) => {
             `npx react-native bundle --platform ${process.env.PLATFORM} --dev false --entry-file ${process.env.ENTRY_FILE} --bundle-output ./${process.env.BUNDLE_FILE}`
         );
 
-        buildPath = path.join(__dirname, '../../index.android.bundle');
+        buildPath = path.join(__dirname, `../../${process.env.BUNDLE_FILE}`);
         const baseBuildSize = fs.statSync(buildPath).size;
-
+        console.log("2222222222", baseBuildSize)
         const buildTotalSizeChange = parseFloat(
             ((headBuildSize - baseBuildSize) * 100) / baseBuildSize
         ).toFixed(4);
 
         let messageToPost =
-            '## Changes in app bundle\n' +
+            `## Changes in ${process.env.PLATFORM} app bundle\n` +
             '| Original Size (KB) | New Size (KB)  | Change (%) |\n' +
             '|   :------------:   |   :--------:   | :--------: |\n';
 
@@ -42,7 +43,7 @@ const prDiffHandler = async ({ github, context, core }) => {
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: messageToPost,
-            stringToSearch: '## Changes in app bundle',
+            stringToSearch: `## Changes in ${process.env.PLATFORM} app bundle`,
         });
     } catch (e) {
         console.log('ERROR', e);

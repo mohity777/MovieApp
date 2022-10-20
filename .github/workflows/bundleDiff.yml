@@ -1,0 +1,54 @@
+name: Bundle Size Difference
+on:
+  push:
+    branches:
+      - main
+      - master
+      - init
+      - release-*
+  pull_request:
+    branches:
+      - main
+      - master
+      - init
+      - release-*
+    types: [opened, synchronize, reopened, edited]
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  Bundle:
+    strategy:
+      matrix:
+        platform: [android, ios]
+
+    runs-on: ubuntu-latest
+
+    env:
+      PLATFORM: ${{ matrix.platform }}
+      ENTRY_FILE: index.js
+      BUNDLE_FILE: ${{ matrix.platform == 'android' && 'index.android.bundle' || 'index.ios.bundle' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        id: cache-packages
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        if: steps.cache-packages.outputs.cache-hit != 'true'
+        run: yarn
+
+      - name: Build Bundle
+        run: npx react-native bundle --platform ${{ env.PLATFORM }} --dev false --entry-file ${{ env.ENTRY_FILE }}  --bundle-output ./${{ env.BUNDLE_FILE }}
+
+      - uses: actions/github-script@v4.1.0
+        with:
+          script: |
+            const script = require('./.github/actionHelpers/bundleSizeDiffHandler.js')
+            await script({github, context, core})

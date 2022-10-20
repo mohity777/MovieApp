@@ -15,6 +15,7 @@ const addComment = async ({
 		comment.body.includes(stringToSearch)
 	);
 	if (existingComment) {
+		console.log("+++++++++++++++++++++++++++++++")
 		await github.issues.updateComment({
 			owner,
 			repo,
