@@ -11,7 +11,7 @@ const prDiffHandler = async ({ github, context, core }) => {
     try {
         let buildPath = path.join(__dirname, `../../${process.env.BUNDLE_FILE}`);
         const headBuildSize = fs.statSync(buildPath).size;
-
+        console.log("11111111", headBuildSize)
         const branchNameBase = context.payload.pull_request.base.ref;
         console.log("|||||||||||||||||||||||||||||||",process.env.PLATFORM, process.env.ENTRY_FILE,process.env.BUNDLE_FILE)
         execSync('/usr/bin/git fetch');
@@ -23,7 +23,7 @@ const prDiffHandler = async ({ github, context, core }) => {
 
         buildPath = path.join(__dirname, `../../${process.env.BUNDLE_FILE}`);
         const baseBuildSize = fs.statSync(buildPath).size;
-
+        console.log("2222222222", baseBuildSize)
         const buildTotalSizeChange = parseFloat(
             ((headBuildSize - baseBuildSize) * 100) / baseBuildSize
         ).toFixed(4);
