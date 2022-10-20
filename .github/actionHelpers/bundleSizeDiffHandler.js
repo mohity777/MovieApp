@@ -18,7 +18,7 @@ const prDiffHandler = async ({ github, context, core }) => {
         execSync('/usr/bin/git stash');
         execSync(`/usr/bin/git checkout --progress --force ${branchNameBase}`);
         execSync(
-            `npx react-native bundle --platform ${process.env.PLATFORM} --dev false --entry-file ${process.env.ENTRY_FILE} --bundle-output ./${process.env.BUNDLE_FILE}`
+            `npx react-native bundle --platform ${process.env.PLATFORM} --dev false --entry-file ${process.env.ENTRY_FILE} --bundle-output ./${process.env.BUNDLE_FILE} -- --reset-cache`
         );
 
         buildPath = path.join(__dirname, `../../${process.env.BUNDLE_FILE}`);
