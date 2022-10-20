@@ -9,7 +9,7 @@ const toKiloBytes = (size) => `${parseFloat(size / 1024).toFixed(2)}`;
 
 const prDiffHandler = async ({ github, context, core }) => {
     try {
-        let buildPath = path.join(__dirname, '../../index.android.bundle');
+        let buildPath = path.join(__dirname, `../../${process.env.BUNDLE_FILE}`);
         const headBuildSize = fs.statSync(buildPath).size;
 
         const branchNameBase = context.payload.pull_request.base.ref;
@@ -21,7 +21,7 @@ const prDiffHandler = async ({ github, context, core }) => {
             `npx react-native bundle --platform ${process.env.PLATFORM} --dev false --entry-file ${process.env.ENTRY_FILE} --bundle-output ./${process.env.BUNDLE_FILE}`
         );
 
-        buildPath = path.join(__dirname, '../../index.android.bundle');
+        buildPath = path.join(__dirname, `../../${process.env.BUNDLE_FILE}`);
         const baseBuildSize = fs.statSync(buildPath).size;
 
         const buildTotalSizeChange = parseFloat(
