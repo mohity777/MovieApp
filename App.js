@@ -5,7 +5,6 @@ import AppNavigationContainer from './src/navigation';
 import store from './src/store';
 
 const App = () => {
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Provider store={store}>
@@ -14,5 +13,6 @@ const App = () => {
     </SafeAreaView>
   );
 };
+
 
 export default App;
