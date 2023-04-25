@@ -1,41 +1,37 @@
-name: Create PR from main_2
+name: create-pr-from-main-2
 
 on:
   pull_request:
     types: [closed]
+    branches: [main_1]
 
 jobs:
-  create_pr:
+  create-pr:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main_1'
+    if: github.event.pull_request.merged == true
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        ref: main_2
-    - name: Create new branch
-      id: new_branch
-      run: |
-        git fetch --all
-        git checkout -b ${{ github.event.pull_request.head.ref }}-0.66.3
-    - name: Get pull request changes
-      id: pr_changes
-      run: |
-        git diff --binary HEAD~1..HEAD > pr_changes.diff
-    - name: Apply changes to new branch
-      run: |
-        git apply pr_changes.diff
-        git add .
-        git commit -m "cherry-pick from PR ${{ github.event.pull_request.number }} by ${{ github.event.pull_request.user.login }}"
-    - name: Push changes to new branch
-      run: |
-        git push origin ${{ steps.new_branch.outputs.new_branch_name }}
-    - name: Create new PR
-      uses: peter-evans/create-pull-request@v3
-      with:
-        title: ${{ github.event.pull_request.title }}
-        body: ${{ github.event.pull_request.body }}
-        commit-message: ${{ github.event.pull_request.title }}
-        branch: ${{ steps.new_branch.outputs.new_branch_name }}
-        base: main_2
-        labels: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+         ref: main_2
+
+      - name: Get PR details
+        id: get_pr
+        uses: peter-evans/get-pull-request@v3
+        with:
+          token: ${{ secrets.PRIVATE_TOKEN_GITHUB }}
+
+      - name: Create new branch
+        run: git checkout -b ${{ steps.get_pr.outputs.data.head.ref }}-0.66.3
+
+      - name: Cherry-pick PR changes
+        run: git cherry-pick -n ${GITHUB_SHA} && git reset
+
+      - name: Create PR to main_2
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: ${{ steps.get_pr.outputs.data.title }}
+          body: ${{ steps.get_pr.outputs.data.body }}
+          head: ${{ steps.get_pr.outputs.data.head.ref }}-0.66.3
+          base: main_2
+          token: ${{ secrets.PRIVATE_TOKEN_GITHUB }}
