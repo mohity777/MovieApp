@@ -1,4 +1,4 @@
-name: create-pr-from-main-2
+name: Auto-create PR to main_2
 
 on:
   pull_request:
@@ -6,32 +6,30 @@ on:
     branches: [main_1]
 
 jobs:
-  create-pr:
+  create_pr:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-         ref: main_2
+    - name: Checkout main_1 branch
+      uses: actions/checkout@v2
+      with:
+        ref: main_1
 
-      - name: Get PR details
-        id: get_pr
-        uses: peter-evans/get-pull-request@v3
-        with:
-          token: ${{ secrets.PRIVATE_TOKEN_GITHUB }}
+    - name: Fetch changes from the merged PR
+      run: git fetch origin pull/${{ github.event.pull_request.number }}/merge:pr-merge
 
-      - name: Create new branch
-        run: git checkout -b ${{ steps.get_pr.outputs.data.head.ref }}-0.66.3
+    - name: Checkout main_2 branch
+      uses: actions/checkout@v2
+      with:
+        ref: main_2
 
-      - name: Cherry-pick PR changes
-        run: git cherry-pick -n ${GITHUB_SHA} && git reset
+    - name: Cherry-pick changes from main_1
+      run: git cherry-pick pr-merge
 
-      - name: Create PR to main_2
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: ${{ steps.get_pr.outputs.data.title }}
-          body: ${{ steps.get_pr.outputs.data.body }}
-          head: ${{ steps.get_pr.outputs.data.head.ref }}-0.66.3
-          base: main_2
-          token: ${{ secrets.PRIVATE_TOKEN_GITHUB }}
+    - name: Create pull request to main_2
+      uses: peter-evans/create-pull-request@v3
+      with:
+        title: 'Automatically created PR from main_1 to main_2'
+        commit-message: 'Cherry-picked changes from main_1 PR'
+        head: 'pr-merge'
+        base: 'main_2'
