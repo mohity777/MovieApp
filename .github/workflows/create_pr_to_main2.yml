@@ -10,26 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout main_1 branch
-      uses: actions/checkout@v2
-      with:
-        ref: main_1
-
-    - name: Fetch changes from the merged PR
-      run: git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-merge
-
     - name: Checkout main_2 branch
       uses: actions/checkout@v2
       with:
         ref: main_2
 
-    - name: Cherry-pick changes from main_1
-      run: git cherry-pick pr-merge
+    - name: Cherry-pick changes of merged PR that triggered the event
+      run: git cherry-pick ${{ github.event.pull_request.merge_commit_sha }}
 
     - name: Create pull request to main_2
       uses: peter-evans/create-pull-request@v3
       with:
-        title: 'Automatically created PR from main_1 to main_2'
+        title:  ${{ github.event.pull_request.title }}
         commit-message: 'Cherry-picked changes from main_1 PR'
+        body: ${{ github.event.pull_request.body }}
+        labels: ${{ join(github.event.pull_request.labels.*.name, ',') }}
         head: 'pr-merge'
         base: 'main_2'
