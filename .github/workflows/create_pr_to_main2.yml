@@ -15,18 +15,16 @@ jobs:
       with:
         ref: main_2
 
-    - name: fetch
-      run: git fetch --all
+    - name: Fetch changes from the merged PR
+      run: git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-merge
 
-    - name: Cherry-pick changes of merged PR that triggered the event
-      run: git cherry-pick -m 1 ${{ github.event.pull_request.merge_commit_sha }}
+    - name: Cherry-pick changes from merged PR
+      run: git cherry-pick pr-merge
 
     - name: Create pull request to main_2
       uses: peter-evans/create-pull-request@v3
       with:
-        title:  ${{ github.event.pull_request.title }}
+        title: 'Automatically created PR from main_1 to main_2'
         commit-message: 'Cherry-picked changes from main_1 PR'
-        body: ${{ github.event.pull_request.body }}
-        labels: ${{ join(github.event.pull_request.labels.*.name, ',') }}
         head: 'pr-merge'
         base: 'main_2'
