@@ -19,7 +19,7 @@ jobs:
       run: git fetch --all
 
     - name: Cherry-pick changes of merged PR that triggered the event
-      run: git cherry-pick ${{ github.event.pull_request.merge_commit_sha }}
+      run: git cherry-pick -m 1 ${{ github.event.pull_request.merge_commit_sha }}
 
     - name: Create pull request to main_2
       uses: peter-evans/create-pull-request@v3
