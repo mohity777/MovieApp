@@ -16,7 +16,7 @@ jobs:
         ref: main_1
 
     - name: Fetch changes from the merged PR
-      run: git fetch origin pull/${{ github.event.pull_request.number }}/merge:pr-merge
+      run: git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-merge
 
     - name: Checkout main_2 branch
       uses: actions/checkout@v2

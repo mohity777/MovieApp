@@ -1,0 +1,48 @@
+name: Create Draft Adhoc release
+
+on:
+  workflow_dispatch:
+    inputs:
+      platformType:
+        description: 'Android or Ios'
+        default: 'android'
+        type: choice
+        options:
+          - android
+          - ios
+
+env:
+  branch: ${{ github.ref }}
+  platform: ${{ github.event.inputs.platformType }}
+
+jobs:
+  createRelease:
+    name: 'Create Tag and Adhoc Draft release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            ref: ${{ env.branch }}
+
+      - name: Read React Native Version
+        run: |
+          echo "react_native_version=$(node -p \"require('./package.json').dependencies['react-native']\")" >> $GITHUB_ENV
+      
+      - name: Set Tag IN ENV 
+        run: |
+          echo "tag_name=v${{ env.platform }}_${{ env.react_native_version}}" >> $GITHUB_ENV
+      
+      - name: Create Tag
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag -a ${{ env.tag_name }} -m "version v${{ env.platform }}_${{ env.react_native_version}}"
+          git push --tags
+      
+      - name: Create release
+        uses: ncipollo/release-action@v1.10.0
+        id: 'create-release'
+        with:
+            tag: ${{ env.tag_name }}
+            generateReleaseNotes: true
+            draft: true
