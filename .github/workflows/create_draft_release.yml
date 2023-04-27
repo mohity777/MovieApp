@@ -25,18 +25,19 @@ jobs:
             ref: ${{ env.branch }}
 
       - name: Read React Native Version
+        id: get_rn_version
         run: |
-          echo "react_native_version=$(node -p \"require('./package.json').dependencies['react-native']\")" >> $GITHUB_ENV
+          echo "::set-output name=rn_version::$(grep -oP '(?<="react-native": ")[^"]+' package.json)"
       
       - name: Set Tag IN ENV 
         run: |
-          echo "tag_name=v${{ env.platform }}_${{ env.react_native_version}}" >> $GITHUB_ENV
+          echo "tag_name=v${{ env.platform }}_${{  steps.get_rn_version.outputs.rn_version }}" >> $GITHUB_ENV
       
       - name: Create Tag
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git tag -a ${{ env.tag_name }} -m "version v${{ env.platform }}_${{ env.react_native_version}}"
+          git tag -a ${{ env.tag_name }} -m "version v${{ env.platform }}_${{  steps.get_rn_version.outputs.rn_version }}"
           git push --tags
       
       - name: Create release
