@@ -15,6 +15,9 @@ jobs:
       with:
         ref: main_2
 
+    - name: fetch
+      run: git fetch --all
+
     - name: Cherry-pick changes of merged PR that triggered the event
       run: git cherry-pick ${{ github.event.pull_request.merge_commit_sha }}
 
