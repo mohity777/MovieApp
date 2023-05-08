@@ -1,0 +1,22 @@
+name: Example Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Last Element of String
+        run: |
+          # Example string with underscores
+          my_string="some_example_string_with_underscores"
+
+          # Use parameter expansion to get the last field
+          last_field="${my_string##*_}"
+
+          # Print the last field
+          echo "Last field: $last_field"
