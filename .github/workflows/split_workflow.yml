@@ -17,14 +17,8 @@ jobs:
         env:
          TAG: ${{ env.rn_version }}
         run: |
-          # Use parameter expansion to get the last field
-          rn-version="${TAG##*_}"
-
-          # Print the last field
-          echo "RN Version: $rn-version"
-
           # Set the rn-version in the environment variable
-          # echo "rn-version=$rn-version" >> $GITHUB_ENV
+          echo "rn-version=${TAG##*_}" >> $GITHUB_ENV
 
       - name: Print rn-version from env
         run: |
