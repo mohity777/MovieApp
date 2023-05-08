@@ -14,16 +14,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get Last Element of String
+        env:
+         tag-name: ${{ env.rn_version }}
         run: |
           # Use parameter expansion to get the last field
-          rn_version=${{ env.rn_version }}
-          last_field="${{ rn_version##*_ }}"
+          rn-version="${tag-name##*_}"
 
           # Print the last field
-          echo "Last field: $last_field"
+          echo "RN Version: $rn-version"
 
           # Set the rn-version in the environment variable
-          echo "rn-version=$last_field" >> $GITHUB_ENV
+          echo "rn-version=$rn-version" >> $GITHUB_ENV
 
       - name: Print rn-version from env
         run: |
