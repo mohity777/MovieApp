@@ -16,7 +16,8 @@ jobs:
       - name: Get Last Element of String
         run: |
           # Use parameter expansion to get the last field
-          last_field="${{ env.rn_version##*_ }}"
+          rn_version=${{ env.rn_version }}
+          last_field="${{ rn_version##*_ }}"
 
           # Print the last field
           echo "Last field: $last_field"
