@@ -24,7 +24,7 @@ jobs:
           echo "RN Version: $rn-version"
 
           # Set the rn-version in the environment variable
-          echo "rn-version=$rn-version" >> $GITHUB_ENV
+          # echo "rn-version=$rn-version" >> $GITHUB_ENV
 
       - name: Print rn-version from env
         run: |
