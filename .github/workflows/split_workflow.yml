@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - master
 
 env:
   rn_version: "1.2.3_beta_gamma_456_op_0.71.7"
