@@ -24,11 +24,11 @@ jobs:
     needs: getRnVersion
     name: "Code Push"
     env:
-     rn-version: ${{ needs.getRnVersion.outputs.rn-version }}
+     RNVERSION: ${{ needs.getRnVersion.outputs.rn-version }}
     steps:
       - name: print rn-version in the environment
         run: |
-          echo "rn-version1: ${{ rn-version }}"
+          echo "rn-version1: ${ RNVERSION }"
 
   versionUpgrade_0_71_7:
     name: Bump Version main
