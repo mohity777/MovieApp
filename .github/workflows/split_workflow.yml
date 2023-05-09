@@ -47,4 +47,4 @@ jobs:
 
       - name: checkout to main
         run: |
-          echo "namE is ${{ env.rn-version == '0.71.7' && 'main' || 'main-${{ env.rn-version }}' }}"
+          echo "nam is ${{ env.rn-version == '0.71.7' && 'main-${{ env.rn-version }}' || ;main }}"
