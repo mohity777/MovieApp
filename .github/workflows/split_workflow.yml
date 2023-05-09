@@ -23,7 +23,7 @@ jobs:
         steps:
             - name: Set the rn-version in the environment variable
               run: |
-               echo "rn-versiont=${{ needs.getRnVersion.outputs.rn-version }}" >> $GITHUB_ENV
+               echo "rn-versiont=$(echo '${{ needs.getRnVersion.outputs.rn-version }}')" >> $GITHUB_ENV
                echo "rn-version1: ${{ env.rn-versiont }}"
                echo "rn-version2: ${{  needs.getRnVersion.outputs.rn-version }}"
           
