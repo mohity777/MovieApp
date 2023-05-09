@@ -5,7 +5,7 @@ on:
       - main
       - master
 env:
-  platform: 'android'
+  platform: "android"
 
 jobs:
   getRnVersion:
@@ -38,6 +38,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [getRnVersion, codePush]
     steps:
+      - name: Set the rn-version in the environment variable
+        run: |
+          echo "rn-version=${{ needs.getRnVersion.outputs.rn-version }}" >> $GITHUB_ENV
+
       - name: print rn-version in the environment
         run: |
-          echo "rn-version2: ${{ needs.getRnVersion.outputs.rn-version }}"
+          echo "rn-version2: ${{ env.rn-version }}"
+
+      - name: checkout to main
+        run: |
+          echo "namE is ${{ env.rn-version == '0.71.7' && 'main' || 'main-${{ env.rn-version }}' }}"
