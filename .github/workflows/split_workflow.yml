@@ -6,36 +6,36 @@ on:
       - master
 
 jobs:
-    getRnVersion: 
-        runs-on: ubuntu-latest
-        outputs:
-          rn-version: ${{ steps.step1.outputs.rn-version }}
-        env:
-          TAG: ${{ '1.2.3_beta_gamma_456_op_0.71.7' }}
-        steps:
-          - id: step1
-            run: echo "rn-version=${TAG##*_}" >> "$GITHUB_OUTPUT"
+  getRnVersion:
+    runs-on: ubuntu-latest
+    outputs:
+      rn-version: ${{ steps.step1.outputs.rn-version }}
+    env:
+      TAG: ${{ 'ueu_bhdhc_0.71.7' }}
+    steps:
+      #split TAG by '_' and get last element which is the RN version
+      - id: step1
+        run: echo "rn-version=${TAG##*_}" >> "$GITHUB_OUTPUT"
 
-    codePush:
-        runs-on: ubuntu-latest
-        needs: getRnVersion
-        name: 'Code Push'
-        steps:
-            - name: Set the rn-version in the environment variable
-              run: |
-               echo "rn-version=${{ needs.getRnVersion.outputs.rn-version }}" >> $GITHUB_ENV
-               echo "rn-version1: ${{  needs.getRnVersion.outputs.rn-version }}"
+  codePush:
+    runs-on: ubuntu-latest
+    needs: getRnVersion
+    name: "Code Push"
+    steps:
+      - name: Set the rn-version in the environment variable
+        run: |
+          echo "rn-version=${{ needs.getRnVersion.outputs.rn-version }}" >> $GITHUB_ENV
 
-            - name: print rn-version in the environment variable
-              run:  |
-               echo "rn-version2: ${{ env.rn-version }}"
-          
-    versionUpgrade_0_71_7:
-        name: Bump Version main
-        runs-on: ubuntu-latest
-        needs: [getRnVersion, codePush]
-        steps:
-            - name: read version
-              id: version_read
-              run: |
-                echo "rn-version3: ${{ needs.getRnVersion.outputs.rn-version }}"
+      - name: print rn-version in the environment
+        run: |
+          echo "rn-version1: ${{ env.rn-version }}"
+
+  versionUpgrade_0_71_7:
+    name: Bump Version main
+    if: ${{ env.platform == 'ios' || needs.getRnVersion.outputs.rn-version == '0.71.7'}}
+    runs-on: ubuntu-latest
+    needs: [getRnVersion, codePush]
+    steps:
+      - name: print rn-version in the environment
+        run: |
+          echo "rn-version2: ${{ needs.getRnVersion.outputs.rn-version }}"
