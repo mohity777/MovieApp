@@ -8,6 +8,7 @@ on:
 
 env:
   rn_version: "1.2.3_beta_gamma_456_op_0.71.7"
+  yu-version: ${{ rn_version##*_ }}
 
 jobs:
   example-job:
@@ -24,3 +25,4 @@ jobs:
         run: |
           # Print the rn-version from the environment variable
           echo "rn-version: ${{ env.rn-version }}"
+          echo "yu-version: ${{ env.yu-version }}"
