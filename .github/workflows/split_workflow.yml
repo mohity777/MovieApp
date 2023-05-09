@@ -35,12 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [getRnVersion, codePush]
     env:
-     rn-version: ${{ needs.getRnVersion.outputs.rn-version }}
+     RNVERSION: ${{ needs.getRnVersion.outputs.rn-version }}
     steps:
       - name: print rn-version in the environment
         run: |
-          echo "rn-version2: ${{ rn-version }}"
+          echo "rn-version2: ${{ RNVERSION }}"
 
       - name: checkout to main
         run: |
-          echo "nam is ${{ rn-version == '0.71.7' && format('main-{0}',rn-version) || 'main' }}"
+          echo "nam is ${{ RNVERSION == '0.71.7' && format('main-{0}',RNVERSION) || 'main' }}"
