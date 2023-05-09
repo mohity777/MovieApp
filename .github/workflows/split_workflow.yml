@@ -8,7 +8,7 @@ on:
 
 env:
   rn_version: "1.2.3_beta_gamma_456_op_0.71.7"
-  yu-version: ${{ env.rn_version }}
+  yu-version: ${{ '1.2.3_beta_gamma_456_op_0.71.7' }}##*_
 
 jobs:
   example-job:
