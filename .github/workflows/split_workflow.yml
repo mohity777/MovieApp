@@ -23,9 +23,12 @@ jobs:
         steps:
             - name: Set the rn-version in the environment variable
               run: |
-               echo "action_state=yellow" >> "$GITHUB_ENV"
-               echo "rn-version1: ${{ env.action_state }}"
-               echo "rn-version2: ${{  needs.getRnVersion.outputs.rn-version }}"
+               echo "rn-version=${{ needs.getRnVersion.outputs.rn-version }}" >> $GITHUB_ENV
+               echo "rn-version1: ${{  needs.getRnVersion.outputs.rn-version }}"
+
+            - name: print rn-version in the environment variable
+              run:  |
+               echo "rn-version2: ${{ env.rn-version }}"
           
     versionUpgrade_0_71_7:
         name: Bump Version main
@@ -35,4 +38,4 @@ jobs:
             - name: read version
               id: version_read
               run: |
-                echo "rn-version2: ${{ needs.getRnVersion.outputs.rn-version }}"
+                echo "rn-version3: ${{ needs.getRnVersion.outputs.rn-version }}"
