@@ -34,7 +34,7 @@ jobs:
 
   versionUpgrade_0_71_7:
     name: Bump Version main
-    if: ${{ env.platform == 'ios' || needs.getRnVersion.outputs.rn-version == '0.71.7' }}
+    if: ${{ env.platform }} == 'ios' || needs.getRnVersion.outputs.rn-version == '0.71.7'
     runs-on: ubuntu-latest
     needs: [getRnVersion, codePush]
     steps:
