@@ -24,23 +24,23 @@ jobs:
     needs: getRnVersion
     name: "Code Push"
     env:
-     RNVERSION: ${{ needs.getRnVersion.outputs.rn-version }}
+     rn-version: ${{ needs.getRnVersion.outputs.rn-version }}
     steps:
       - name: print rn-version in the environment
         run: |
-          echo "rn-version1: ${ RNVERSION }"
+          echo "rn-version1: ${{ env.rn-version }}"
 
   versionUpgrade_0_71_7:
     name: Bump Version main
     runs-on: ubuntu-latest
     needs: [getRnVersion, codePush]
     env:
-     RNVERSION: ${{ needs.getRnVersion.outputs.rn-version }}
+     rn-version: ${{ needs.getRnVersion.outputs.rn-version }}
     steps:
       - name: print rn-version in the environment
         run: |
-          echo "rn-version2: ${{ RNVERSION }}"
+          echo "rn-version2: ${{ env.rn-version }}"
 
       - name: checkout to main
         run: |
-          echo "nam is ${{ RNVERSION == '0.71.7' && format('main-{0}',RNVERSION) || 'main' }}"
+          echo "nam is ${{ env.rn-version == '0.71.7' && format('main-{0}',env.rn-version) || 'main' }}"
