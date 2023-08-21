@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { Provider } from 'react-redux';
 import AppNavigationContainer from './src/navigation';
@@ -15,4 +15,5 @@ const App = () => {
   );
 };
 
+//feat
 export default App;
